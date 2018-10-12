@@ -35,9 +35,10 @@ class ServerMessageTypes(object):
     DESTROYED = 22
     ENTEREDGOAL = 23
     KILL = 24
-    SNITCHCOLLECTED = 25,
-    SNITCHAPPEARED = 26
-    GAMETIMEUPDATE = 27
+    SNITCHAPPEARED = 25
+    GAMETIMEUPDATE = 26
+    HITDETECTED = 27
+    SUCCESSFULLHIT = 28
 
     strings = {
         TEST: "TEST",
@@ -65,9 +66,10 @@ class ServerMessageTypes(object):
         DESTROYED: "DESTROYED",
         ENTEREDGOAL: "ENTEREDGOAL",
         KILL: "KILL",
-        SNITCHCOLLECTED: "SNITCHCOLLECTED",
         SNITCHAPPEARED: "SNITCHAPPEARED",
-        GAMETIMEUPDATE: "GAMETIMEUPDATE"
+        GAMETIMEUPDATE: "GAMETIMEUPDATE",
+        HITDETECTED: "HITDETECTED",
+        SUCCESSFULLHIT: "SUCCESSFULLHIT"
     }
 
     def toString(self, id):
@@ -104,15 +106,17 @@ class ServerComms(object):
         messageLen = struct.unpack('>B', messageLenRaw)[0]
 
         if messageLen == 0:
-            messageData = None
+            messageData = bytearray()
             messagePayload = None
         else:
             messageData = self.ServerSocket.recv(messageLen)
             logging.debug("*** {}".format(messageData))
-            messagePayload = json.loads(messageData)
+            messagePayload = json.loads(messageData.decode('utf-8'))
 
-        logging.debug('Turned message {} into type {} payload {}'.format(binascii.hexlify(
-            messageData), self.MessageTypes.toString(messageType), messagePayload))
+        logging.debug('Turned message {} into type {} payload {}'.format(
+            binascii.hexlify(messageData),
+            self.MessageTypes.toString(messageType),
+            messagePayload))
         return messagePayload
 
     def sendMessage(self, messageType=None, messagePayload=None):
@@ -130,32 +134,30 @@ class ServerComms(object):
             messageString = json.dumps(messagePayload)
             message.append(len(messageString))
             message.extend(str.encode(messageString))
+
         else:
             message.append(0)
 
         logging.debug('Turned message type {} payload {} into {}'.format(
-            self.MessageTypes.toString(messageType), messagePayload, binascii.hexlify(message)))
+            self.MessageTypes.toString(messageType),
+            messagePayload,
+            binascii.hexlify(message)))
         return self.ServerSocket.send(message)
 
 
 # Parse command line args
 parser = argparse.ArgumentParser()
-parser.add_argument('-d', '--debug', action='store_true',
-                    help='Enable debug output')
-parser.add_argument('-H', '--hostname', default='127.0.0.1',
-                    help='Hostname to connect to')
-parser.add_argument('-p', '--port', default=8052,
-                    type=int, help='Port to connect to')
+parser.add_argument('-d', '--debug', action='store_true', help='Enable debug output')
+parser.add_argument('-H', '--hostname', default='127.0.0.1', help='Hostname to connect to')
+parser.add_argument('-p', '--port', default=8052, type=int, help='Port to connect to')
 parser.add_argument('-n', '--name', default='RandomBot', help='Name of bot')
 args = parser.parse_args()
 
 # Set up console logging
 if args.debug:
-    logging.basicConfig(
-        format='[%(asctime)s] %(message)s', level=logging.DEBUG)
+    logging.basicConfig(format='[%(asctime)s] %(message)s', level=logging.DEBUG)
 else:
     logging.basicConfig(format='[%(asctime)s] %(message)s', level=logging.INFO)
-
 
 # Connect to game server
 GameServer = ServerComms(args.hostname, args.port)
@@ -175,12 +177,11 @@ while True:
             GameServer.sendMessage(ServerMessageTypes.FIRE)
     elif i == 10:
         logging.info("Turning randomly")
-        GameServer.sendMessage(ServerMessageTypes.TURNTOHEADING, {
-                               'Amount': random.randint(0, 359)})
+        GameServer.sendMessage(ServerMessageTypes.TURNTOHEADING, {'Amount': random.randint(0, 359)})
     elif i == 15:
         logging.info("Moving randomly")
-        GameServer.sendMessage(ServerMessageTypes.MOVEFORWARDDISTANCE, {
-                               'Amount': random.randint(0, 10)})
+        GameServer.sendMessage(ServerMessageTypes.MOVEFORWARDDISTANCE, {'Amount': random.randint(0, 10)})
     i = i + 1
     if i > 20:
         i = 0
+
