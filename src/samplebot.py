@@ -35,9 +35,10 @@ class ServerMessageTypes(object):
     DESTROYED = 22
     ENTEREDGOAL = 23
     KILL = 24
-    SNITCHCOLLECTED = 25,
-    SNITCHAPPEARED = 26
-    GAMETIMEUPDATE = 27
+    SNITCHAPPEARED = 25
+    GAMETIMEUPDATE = 26
+    HITDETECTED = 27
+    SUCCESSFULLHIT = 28
 
     strings = {
         TEST: "TEST",
@@ -65,9 +66,10 @@ class ServerMessageTypes(object):
         DESTROYED: "DESTROYED",
         ENTEREDGOAL: "ENTEREDGOAL",
         KILL: "KILL",
-        SNITCHCOLLECTED: "SNITCHCOLLECTED",
         SNITCHAPPEARED: "SNITCHAPPEARED",
-        GAMETIMEUPDATE: "GAMETIMEUPDATE"
+        GAMETIMEUPDATE: "GAMETIMEUPDATE",
+        HITDETECTED: "HITDETECTED",
+        SUCCESSFULLHIT: "SUCCESSFULLHIT"
     }
 
     def toString(self, id):
@@ -109,7 +111,7 @@ class ServerComms(object):
         else:
             messageData = self.ServerSocket.recv(messageLen)
             logging.debug("*** {}".format(messageData))
-            messagePayload = json.loads(messageData)
+            messagePayload = json.loads(messageData.decode('utf-8'))
 
         logging.debug('Turned message {} into type {} payload {}'.format(binascii.hexlify(
             messageData), self.MessageTypes.toString(messageType), messagePayload))
@@ -130,6 +132,7 @@ class ServerComms(object):
             messageString = json.dumps(messagePayload)
             message.append(len(messageString))
             message.extend(str.encode(messageString))
+
         else:
             message.append(0)
 
