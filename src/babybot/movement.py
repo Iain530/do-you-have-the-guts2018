@@ -4,10 +4,11 @@ from server import ServerMessageTypes
 
 class Movement:
 
-    def __init__(self, GameServer):
+    def __init__(self, GameServer, status):
         self.GameServer = GameServer
         self.moving = False
         self.turning = False
+        self.status = status
 
     def turn(self):
         self.GameServer.sendMessage(ServerMessageTypes.TURNTOHEADING, {
