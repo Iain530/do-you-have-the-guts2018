@@ -7,6 +7,7 @@ import binascii
 import struct
 import argparse
 import random
+import threading
 
 
 class ServerMessageTypes(object):
@@ -96,7 +97,7 @@ class ServerComms(object):
         self.ServerSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.ServerSocket.connect((hostname, port))
 
-    def readMessage(self):
+    def read_message(self):
         '''
         Read a message from the server
         '''
@@ -117,7 +118,7 @@ class ServerComms(object):
             messageData), self.MessageTypes.toString(messageType), messagePayload))
         return messagePayload
 
-    def sendMessage(self, messageType=None, messagePayload=None):
+    def send_message(self, messageType=None, messagePayload=None):
         '''
         Send a message to the server
         '''
@@ -140,6 +141,9 @@ class ServerComms(object):
             self.MessageTypes.toString(messageType), messagePayload, binascii.hexlify(message)))
         return self.ServerSocket.send(message)
 
+
+def worker():
+    """"""
 
 # Parse command line args
 parser = argparse.ArgumentParser()
@@ -165,24 +169,24 @@ GameServer = ServerComms(args.hostname, args.port)
 
 # Spawn our tank
 logging.info("Creating tank with name '{}'".format(args.name))
-GameServer.sendMessage(ServerMessageTypes.CREATETANK, {'Name': args.name})
+GameServer.send_message(ServerMessageTypes.CREATETANK, {'Name': args.name})
 
 # Main loop - read game messages, ignore them and randomly perform actions
 i = 0
 while True:
-    message = GameServer.readMessage()
+    message = GameServer.read_message()
 
     if i == 5:
         if random.randint(0, 10) > 5:
             logging.info("Firing")
-            GameServer.sendMessage(ServerMessageTypes.FIRE)
+            GameServer.send_message(ServerMessageTypes.FIRE)
     elif i == 10:
         logging.info("Turning randomly")
-        GameServer.sendMessage(ServerMessageTypes.TURNTOHEADING, {
+        GameServer.send_message(ServerMessageTypes.TURNTOHEADING, {
                                'Amount': random.randint(0, 359)})
     elif i == 15:
         logging.info("Moving randomly")
-        GameServer.sendMessage(ServerMessageTypes.MOVEFORWARDDISTANCE, {
+        GameServer.send_message(ServerMessageTypes.MOVEFORWARDDISTANCE, {
                                'Amount': random.randint(0, 10)})
     i = i + 1
     if i > 20:
