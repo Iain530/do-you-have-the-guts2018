@@ -1,3 +1,7 @@
+from message import Message
+from server import ServerMessageTypes
+
+
 class Status:
     def __init__(self) -> None:
         self.id = None
@@ -8,5 +12,6 @@ class Status:
         self.ammo = 10
         self.points = 0
 
-    def update(self, message):
-        pass
+    def update(self, message: Message) -> None:
+        if message.type == ServerMessageTypes.OBJECTUPDATE:
+            pass 
