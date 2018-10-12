@@ -40,6 +40,8 @@ while True:
     message = GameServer.readMessage()
     status.update(message)
 
+    GameServer.sendMessage(ServerMessageTypes.FIRE)
+
     if i == 5:
         if random.randint(0, 10) > 5:
             logging.info("Firing")
