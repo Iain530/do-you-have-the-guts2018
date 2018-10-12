@@ -32,15 +32,12 @@ GameServer = ServerComms(args.hostname, args.port)
 logging.info("Creating tank with name '{}'".format(args.name))
 GameServer.sendMessage(ServerMessageTypes.CREATETANK, {'Name': args.name})
 
-status = Status()
+status = Status(name=args.name)
 
 # Main loop - read game messages, ignore them and randomly perform actions
 i = 0
 while True:
     message = GameServer.readMessage()
-
-    print(message.type, message.payload)
-
     status.update(message)
 
     if i == 5:
