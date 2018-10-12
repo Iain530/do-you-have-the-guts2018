@@ -129,7 +129,7 @@ class ServerComms(object):
         if messagePayload is not None:
             messageString = json.dumps(messagePayload)
             message.append(len(messageString))
-            message.extend(messageString)
+            message.extend(str.encode(messageString))
         else:
             message.append(0)
 
