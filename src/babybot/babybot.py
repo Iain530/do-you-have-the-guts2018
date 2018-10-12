@@ -3,6 +3,7 @@ import logging
 import argparse
 import random
 from server import ServerMessageTypes, ServerComms
+from status import Status
 
 
 # Parse command line args
@@ -30,6 +31,8 @@ GameServer = ServerComms(args.hostname, args.port)
 # Spawn our tank
 logging.info("Creating tank with name '{}'".format(args.name))
 GameServer.sendMessage(ServerMessageTypes.CREATETANK, {'Name': args.name})
+
+status = Status()
 
 # Main loop - read game messages, ignore them and randomly perform actions
 i = 0
