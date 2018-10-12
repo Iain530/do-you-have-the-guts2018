@@ -5,6 +5,7 @@ import random
 from server import ServerMessageTypes, ServerComms
 from status import Status
 from movement import Movement
+from attacking import Attacking
 
 # Parse command line args
 parser = argparse.ArgumentParser()
@@ -34,6 +35,7 @@ GameServer.sendMessage(ServerMessageTypes.CREATETANK, {'Name': args.name})
 
 status = Status(name=args.name)
 movement = Movement(GameServer=GameServer, status=status)
+attacking = Attacking(GameServer=GameServer, status=status)
 
 # Main loop - read game messages, ignore them and randomly perform actions
 i = 0
@@ -43,6 +45,7 @@ while True:
     movement.moveforward()
     movement.turn()
     movement.movebackward()
+    # attacking.aim_left()
 
     # if i == 5:
     #     if random.randint(0, 10) > 5:

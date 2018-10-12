@@ -3,8 +3,8 @@ import logging
 
 
 class Attacking:
-    def __init__(self, GameServer, Status) -> None:
-        self.status = Status
+    def __init__(self, GameServer, status) -> None:
+        self.status = status
         self.GameServer = GameServer
 
     def fire(self):
