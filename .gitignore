@@ -1,3 +1,5 @@
 *.pyc
 servers/mstanks_linux/*
 servers/mstanks_windows/*
+
+.idea/
