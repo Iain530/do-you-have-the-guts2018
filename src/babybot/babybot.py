@@ -4,7 +4,7 @@ import argparse
 import random
 from server import ServerMessageTypes, ServerComms
 from status import Status
-
+from movement import Movement
 
 # Parse command line args
 parser = argparse.ArgumentParser()
@@ -33,6 +33,7 @@ logging.info("Creating tank with name '{}'".format(args.name))
 GameServer.sendMessage(ServerMessageTypes.CREATETANK, {'Name': args.name})
 
 status = Status(name=args.name)
+movement = Movement(GameServer=GameServer, status=status)
 
 # Main loop - read game messages, ignore them and randomly perform actions
 i = 0
@@ -40,18 +41,22 @@ while True:
     message = GameServer.readMessage()
     status.update(message)
 
-    if i == 5:
-        if random.randint(0, 10) > 5:
-            logging.info("Firing")
-            GameServer.sendMessage(ServerMessageTypes.FIRE)
-    elif i == 10:
-        logging.info("Turning randomly")
-        GameServer.sendMessage(ServerMessageTypes.TURNTOHEADING, {
-                               'Amount': random.randint(0, 359)})
-    elif i == 15:
-        logging.info("Moving randomly")
-        GameServer.sendMessage(ServerMessageTypes.MOVEFORWARDDISTANCE, {
-                               'Amount': random.randint(0, 10)})
-    i = i + 1
-    if i > 20:
-        i = 0
+    movement.moveforward()
+    movement.turn()
+    movement.movebackward()
+
+    # if i == 5:
+    #     if random.randint(0, 10) > 5:
+    #         logging.info("Firing")
+    #         GameServer.sendMessage(ServerMessageTypes.FIRE)
+    # elif i == 10:
+    #     logging.info("Turning randomly")
+    #     GameServer.sendMessage(ServerMessageTypes.TURNTOHEADING, {
+    #                            'Amount': random.randint(0, 359)})
+    # elif i == 15:
+    #     logging.info("Moving randomly")
+    #     GameServer.sendMessage(ServerMessageTypes.MOVEFORWARDDISTANCE, {
+    #                            'Amount': random.randint(0, 10)})
+    # i = i + 1
+    # if i > 20:
+    #     i = 0
