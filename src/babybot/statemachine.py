@@ -44,7 +44,7 @@ class StateMachine:
         # ]
         # turret_priorities = [
         #     self.turret_states[i].priority(
-        #         self.status, i == self.current_turrent_state_i
+        #         self.status, i == self.current_turret_state_i
         #     ) for i in range(len(self.turret_states))
         # ]
         pass
@@ -52,4 +52,4 @@ class StateMachine:
     def perform_current_state(self) -> None:
         logging.info(f"Performing states: {self.current_body_state}")
         self.current_body_state.perform()
-        # self.current_turrent_state.perform()
+        # self.current_turret_state.perform()
