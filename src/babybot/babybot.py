@@ -1,11 +1,8 @@
 #!/usr/bin/python
 import logging
 import argparse
-import random
 from server import ServerMessageTypes, ServerComms
-from status import Status
-from movement import Movement
-from attacking import Attacking
+from statemachine import StateMachine
 
 # Parse command line args
 parser = argparse.ArgumentParser()
@@ -33,17 +30,12 @@ GameServer = ServerComms(args.hostname, args.port)
 logging.info("Creating tank with name '{}'".format(args.name))
 GameServer.sendMessage(ServerMessageTypes.CREATETANK, {'Name': args.name})
 
-status = Status(name=args.name)
-movement = Movement(GameServer=GameServer, status=status)
-attacking = Attacking(GameServer=GameServer, status=status)
+state_machine = StateMachine(GameServer=GameServer, name=args.name)
 
 # Main loop - read game messages, ignore them and randomly perform actions
 i = 0
 while True:
     message = GameServer.readMessage()
-    status.update(message)
-    movement.moveforward()
-    movement.turn()
-    movement.movebackward()
+    state_machine.update(message)
     # attacking.aim_left()
     print(message)
