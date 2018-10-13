@@ -15,7 +15,7 @@ class AttackState(State):
         self.turret_controls.aim_at_heading(next_heading)
 
         heading = self.status.heading
-        if within_degrees(10, heading, next_heading):
+        if within_degrees(20, heading, next_heading):
             self.turret_controls.fire()
 
     def calculate_priority(self, is_current_state: bool) -> float:
