@@ -1,9 +1,8 @@
-from abc import ABC, abstractmethod
 from status import Status
 from .state import State
 
-class DummyState(State):
 
+class DummyState(State):
     def perform(self):
         pass
 
