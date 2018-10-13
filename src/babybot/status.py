@@ -21,6 +21,7 @@ class Status:
         self.snitch_carrier = None
 
     def update(self, message: Message) -> None:
+        """ Process an incoming server message """
         if message.type == ServerMessageTypes.OBJECTUPDATE:
             payload = ObjectUpdate(message.payload)
             if payload.type == 'Tank':
@@ -53,11 +54,14 @@ class Status:
         self.snitch_available = True
 
     def respawn(self) -> None:
-        """ We died :( """
+        """ We died :( so reset our stats """
         self.points = 0
         self.health = 5
 
     def update_self(self, payload: ObjectUpdate) -> None:
+        """
+        Update status based on an ObjectUpdate for our own tank
+        """
         self.position = (payload.x, payload.y)
         self.heading = payload.heading
         self.turret_heading = payload.turret_heading
