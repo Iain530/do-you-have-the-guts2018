@@ -2,8 +2,7 @@ from server import ServerMessageTypes
 import logging
 
 
-class TurretMovement
-
+class TurretMovement:
     def __init__(self, GameServer, status) -> None:
         self.status = status
         self.GameServer = GameServer
