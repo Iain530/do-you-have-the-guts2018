@@ -1,7 +1,7 @@
 from server import ObjectUpdate
 from time import time
 
-COLLECTABLE_TYPES = set(['Ammo', ''])  # TODO
+COLLECTABLE_TYPES = set(['AmmoPickup', 'HealthPickup', 'Snitch'])
 
 
 class Collectable:
