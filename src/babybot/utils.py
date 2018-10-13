@@ -1,5 +1,5 @@
 from typing import Tuple
-from math import atan2, pi
+import math
 
 Vector = Tuple[float, float]
 
@@ -14,7 +14,7 @@ def heading_from_to(p1: Vector, p2: Vector) -> float:
     x2 = p2[0]
     y2 = p2[1]
 
-    angle = atan2(y2-y1, x2-x1) * (180/pi)
+    angle = math.atan2(y2-y1, x2-x1) * (180/math.pi)
     angle = (angle - 360) % 360
     return abs(angle)
 
@@ -30,6 +30,7 @@ def should_turn_left(current_heading: float, goal_heading: float) -> bool:
     else:
         return diff >= -180
 
+
 def closest_point(current_point, points) -> Vector:
     """
     Returns the point from a list of points which is closest to the given
@@ -44,7 +45,8 @@ def closest_point(current_point, points) -> Vector:
             closest = other_point
             distance_to_closest = distance
 
-    return other_point
+    return closest
+
 
 def calculate_distance(point1, point2) -> float:
     """
