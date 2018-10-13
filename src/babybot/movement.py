@@ -14,13 +14,25 @@ class Movement:
         self.GameServer.sendMessage(ServerMessageTypes.TURNTOHEADING, {
             'Amount': random.randint(0, 359)}) # random turning
 
-    def moveforward(self):
+    def moveforwarddistance(self):
         self.GameServer.sendMessage(ServerMessageTypes.MOVEFORWARDDISTANCE, {
             'Amount': random.randint(0,10)}) # random moving forward
 
-    def movebackward(self):
+    def movebackwarddistance(self):
         self.GameServer.sendMessage(ServerMessageTypes.MOVEBACKWARDDISTANCE, {
             'Amount': random.randint(0,10)}) # random moving backward
+
+    def moveforwardtoggle(self):
+        self.GameServer.sendMessage(ServerMessageTypes.TOGGLEFORWARD)
+
+    def movebackwardtoggle(self):
+        self.GameServer.sendMessage(ServerMessageTypes.TOGGLEREVERSE)
+
+    def turnlefttoggle(self):
+        self.GameServer.sendMessage(ServerMessageTypes.TOGGLELEFT)
+
+    def turnrighttoggle(self):
+        self.GameServer.sendMessage(ServerMessageTypes.TOGGLERIGHT)
 
     def stopmoving(self):
         if self.moving:
