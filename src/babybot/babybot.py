@@ -46,6 +46,7 @@ while True:
     movement.turn()
     movement.movebackward()
     # attacking.aim_left()
+    print(message)
 
     # if i == 5:
     #     if random.randint(0, 10) > 5:

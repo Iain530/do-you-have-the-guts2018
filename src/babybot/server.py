@@ -6,6 +6,19 @@ import logging
 from message import Message
 
 
+class ObjectUpdate:
+    def __init__(self, message: Message) -> None:
+        self.name = message['Name']
+        self.id = message['Id']
+        self.type = message['Type']
+        self.x = message['X']
+        self.y = message['Y']
+        self.heading = message['Heading']
+        self.turret_heading = message['TurretHeading']
+        self.health = message['Health']
+        self.ammo = message['Ammo']
+
+
 class ServerMessageTypes(object):
     TEST = 0
     CREATETANK = 1
