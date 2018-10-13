@@ -1,6 +1,7 @@
 from server import ObjectUpdate
 from time import time
 from typing import Tuple
+from utils import within_degrees
 
 Vector = Tuple[float, float]
 
@@ -36,7 +37,13 @@ class Enemy:
         """
         Returns true if the enemy tank is aiming at the given position
         """
-        pass
+        heading_to_player = heading_from_to(current_pos(), position)
+
+        is_it = within_degrees(2, self.turret_heading, heading_to_player)
+
+        print(is_it)
+
+        return is_it
 
     def has_vision_of(self, position: Vector) -> bool:
         """

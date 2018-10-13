@@ -4,3 +4,4 @@ from .gotogoalstate import GoToGoalState
 from .collecthealthstate import CollectHealthState
 from .collectammostate import CollectAmmoState
 from .scanstate import ScanState
+from .attackstate import AttackState

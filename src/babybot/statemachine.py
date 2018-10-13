@@ -4,10 +4,11 @@ from bodymovement import BodyMovement
 from turretmovement import TurretMovement
 import logging
 from states import (DummyState, GoToGoalState, CollectHealthState, CollectAmmoState,
-                    ScanState)
+                    ScanState, AttackState)
 
 AVAILABLE_TURRET_STATES = [
     ScanState,
+    AttackState,
 ]
 AVAILABLE_BODY_STATES = [
     GoToGoalState,
