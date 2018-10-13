@@ -9,7 +9,20 @@ class BodyMovement:
         self.turning = False
         self.status = status
 
-    def turndistance(self, amount):
+    def movetopoint(self, target: Vector):
+        current_coords = self.status.position
+
+        ## get heading to turn to
+        heading = heading_from_to(current_coords, target)
+
+        ## turn to heading
+        turntoheading(heading)
+
+        ## move forwards to coords
+        if (current_coords != target):
+            moveforwarddistance(1)
+
+    def turntoheading(self, heading):
         self.GameServer.sendMessage(ServerMessageTypes.TURNTOHEADING, {
             'Amount': amount})
 
