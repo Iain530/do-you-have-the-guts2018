@@ -8,4 +8,4 @@ class GoToGoalState(State):
         pass
 
     def calculate_priority(self, status: Status, is_current_state: bool):
-        pass
+        return 0
