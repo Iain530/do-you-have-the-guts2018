@@ -3,7 +3,7 @@ from server import Message
 from bodymovement import BodyMovement
 from turretmovement import TurretMovement
 import logging
-from states import *
+from states import DummyState, GoToGoalState
 
 AVAILABLE_TURRET_STATES = [
     DummyState,
