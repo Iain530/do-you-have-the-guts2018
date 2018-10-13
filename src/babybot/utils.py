@@ -1,5 +1,5 @@
 from typing import Tuple
-import math
+from math import atan2, pi
 
 Vector = Tuple[float, float]
 
@@ -17,6 +17,7 @@ def heading_from_to(p1: Vector, p2: Vector) -> float:
     angle = atan2(y2-y1, x2-x1) * (180/pi)
     angle = (angle - 360) % 360
     return abs(angle)
+
 
 def should_turn_left(current_heading: float, goal_heading: float) -> bool:
     """
