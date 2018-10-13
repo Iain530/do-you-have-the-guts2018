@@ -19,4 +19,4 @@ class AttackState(State):
             self.turret_controls.fire()
 
     def calculate_priority(self, is_current_state: bool) -> float:
-        return 0.5
+        return 0.5 # Default as only 2 attacking priorities

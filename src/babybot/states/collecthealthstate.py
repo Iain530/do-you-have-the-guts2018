@@ -7,4 +7,6 @@ class CollectHealthState(State):
         self.body_controls.move_to_point(closest_health.position)
 
     def calculate_priority(self, is_current_state: bool) -> None:
-        return 0  # TODO
+        if self.status.health == 5:
+            return 0
+        return (0.6 - (self.status.health * 0.1)) + (3 * 0.125)

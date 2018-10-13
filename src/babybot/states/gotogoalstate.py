@@ -11,4 +11,6 @@ class GoToGoalState(State):
         self.body_controls.movetopoint(closestGoal)
 
     def calculate_priority(self, is_current_state: bool):
-        return 0
+        if self.status.points == 0:
+            return 0  # Even though highest priority, if no points, no action
+        return (self.status.points * 0.2) + (4 * 0.125)
