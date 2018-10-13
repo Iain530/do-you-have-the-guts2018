@@ -17,7 +17,7 @@ class ScanState(State):
             self.finished_scan = False
             self.start_time = time()
         self.turret_controls.aim_left()  # consider distance to walls?
-        if time() - self.start_time > SCAN_TIME:
+        if float(time() - self.start_time) > SCAN_TIME:
             self.finished_scan = True
 
     def calculate_priority(self, is_current_state: bool) -> float:
