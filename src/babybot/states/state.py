@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 from status import Status
 
 class State(ABC):
-
     def __init__(self, turret_controls, body_controls, status):
         self.turret_controls = turret_controls
         self.body_controls = body_controls

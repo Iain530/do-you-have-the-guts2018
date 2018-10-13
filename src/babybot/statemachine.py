@@ -38,12 +38,12 @@ class StateMachine:
 
     def choose_state(self) -> None:
         body_priorities = [
-            self.body_states[i].priority(
+            self.body_states[i].calculate_priority(
                 self.status, i == self.current_body_state_i
             ) for i in range(len(self.body_states))
         ]
         turret_priorities = [
-            self.turret_states[i].priority(
+            self.turret_states[i].calculate_priority(
                 self.status, i == self.current_turret_state_i
             ) for i in range(len(self.turret_states))
         ]
