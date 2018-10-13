@@ -1,8 +1,7 @@
-import random
 from server import ServerMessageTypes
 
 
-class Movement:
+class BodyMovement:
 
     def __init__(self, GameServer, status):
         self.GameServer = GameServer
