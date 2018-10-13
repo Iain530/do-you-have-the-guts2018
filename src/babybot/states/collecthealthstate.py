@@ -1,4 +1,7 @@
-class CollectHealthState:
+from .state import State
+
+
+class CollectHealthState(State):
     def perform(self) -> None:
         closest_health = self.status.find_nearest_health()
         self.body_controls.move_to_point(closest_health.position)

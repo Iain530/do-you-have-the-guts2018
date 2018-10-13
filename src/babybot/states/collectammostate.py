@@ -1,4 +1,7 @@
-class CollectAmmoState:
+from .state import State
+
+
+class CollectAmmoState(State):
     def perform(self) -> None:
         closest_ammo = self.status.find_nearest_ammo()
         self.body_controls.move_to_point(closest_ammo.position)

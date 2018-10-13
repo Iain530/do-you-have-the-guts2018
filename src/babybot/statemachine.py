@@ -9,7 +9,6 @@ AVAILABLE_TURRET_STATES = [
     DummyState,
 ]
 AVAILABLE_BODY_STATES = [
-    DummyState,
     GoToGoalState,
     CollectAmmoState,
     CollectHealthState,
@@ -41,12 +40,12 @@ class StateMachine:
     def choose_state(self) -> None:
         body_priorities = [
             self.body_states[i].calculate_priority(
-                self.status, i == self.current_body_state_i
+                is_current_state=(i == self.current_body_state_i)
             ) for i in range(len(self.body_states))
         ]
         turret_priorities = [
             self.turret_states[i].calculate_priority(
-                self.status, i == self.current_turret_state_i
+                is_current_state=(i == self.current_turret_state_i)
             ) for i in range(len(self.turret_states))
         ]
         self.current_body_state_i = body_priorities.index(max(body_priorities))
