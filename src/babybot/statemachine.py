@@ -47,6 +47,6 @@ class StateMachine:
         self.current_turret_state = self.turret_states[self.current_turret_state_i]
 
     def perform_current_state(self) -> None:
-        logging.info(f"Performing states: {self.current_body_state}")
+        logging.info(f"Performing states: {self.current_body_state} {self.current_turret_state}")
         self.current_body_state.perform()
         self.current_turret_state.perform()
