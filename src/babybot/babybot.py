@@ -37,5 +37,5 @@ i = 0
 while True:
     message = GameServer.readMessage()
     state_machine.update(message)
-    # attacking.aim_left()
-    print(message)
+    state_machine.choose_state()
+    state_machine.perform_current_state()
