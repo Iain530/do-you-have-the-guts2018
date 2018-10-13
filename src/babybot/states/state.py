@@ -4,12 +4,12 @@ from status import Status
 class State(ABC):
 
     def __init__(self, turret_controls, body_controls, status):
-        this.turret_controls = turret_controls
-        this.body_controls = body_controls
-        this.status = status
+        self.turret_controls = turret_controls
+        self.body_controls = body_controls
+        self.status = status
 
     @abstractmethod
-    def perform_action(self):
+    def perform(self):
         pass
 
     @abstractmethod
