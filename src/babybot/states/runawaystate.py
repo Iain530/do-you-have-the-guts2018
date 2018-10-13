@@ -1,6 +1,5 @@
 from .state import State
-from enemy import Enemy
-# from babybot import BodyMovement
+from utils import within_degrees
 
 class RunAwayState(State):
     def perform(self):
@@ -12,6 +11,6 @@ class RunAwayState(State):
                 pass
 
     def calculate_priority(self, is_current_state: bool):
-        # if not in bullet's width, priority = 0
-        # if in bullet's width, priority = 1
-        pass
+        if within_degrees:
+            return 1
+        return 0
