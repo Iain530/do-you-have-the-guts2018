@@ -1,4 +1,8 @@
 from server import ObjectUpdate
+from time import time
+from typing import Tuple
+
+Vector = Tuple[float, float]
 
 
 class Enemy:
@@ -6,11 +10,36 @@ class Enemy:
         self.name = payload.name
         self.id = payload.id
         self.type = payload.type
-        self.position = (payload.x, payload.y)
+        self.last_seen = time()
+        self.position = [(payload.x, payload.y)]
         self.heading = payload.heading
         self.turret_heading = payload.turret_heading
         self.health = payload.health
         self.ammo = payload.ammo
 
+    def update(self, payload: ObjectUpdate) -> None:
+        if payload.id == self.id:
+            self.last_seen = time()
+            self.position = self.position[-4:] + [(payload.x), (payload.y)]
+            self.heading = payload.heading
+            self.turret_heading = payload.turret_heading
+            self.health = payload.health
+            self.ammo = payload.ammo
+
     def has_ammo(self) -> bool:
         return self.ammo > 0
+
+    def current_pos(self) -> Tuple[float, float]:
+        return self.position[-1]
+
+    def is_aiming_at(self, position: Vector) -> bool:
+        """
+        Returns true if the enemy tank is aiming at the given position
+        """
+        pass
+
+    def has_vision_of(self, position: Vector) -> bool:
+        """
+        Returns true if the given position is in the enemy tanks FOV
+        """
+        pass

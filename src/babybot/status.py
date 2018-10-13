@@ -1,10 +1,8 @@
 from message import Message
 from server import ServerMessageTypes, ObjectUpdate
 from enemy import Enemy
+from collectable import COLLECTABLE_TYPES
 import logging
-
-
-COLLECTABLE_TYPES = set(['Ammo', '']) # TODO
 
 
 class Status:
@@ -67,7 +65,10 @@ class Status:
         self.ammo = payload.ammo
 
     def update_enemy(self, payload: ObjectUpdate) -> None:
-        pass
+        if payload.id not in self.other_tanks:
+            self.other_tanks[id] = Enemy(payload)
+        else:
+            self.other_tanks[id].update(payload)
 
     def update_collectable(self, payload: ObjectUpdate) -> None:
         pass
