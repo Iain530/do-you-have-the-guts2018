@@ -14,7 +14,7 @@ class StateMachine:
         self.bodycontrols = BodyMovement(GameServer=GameServer, status=self.status)
         self.current_state = STATES[0]
 
-    def update(self, message: Message):
+    def update(self, message: Message) -> None:
         pass
 
     def choose_state(self) -> None:
