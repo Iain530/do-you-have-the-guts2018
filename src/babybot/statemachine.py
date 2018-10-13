@@ -3,14 +3,16 @@ from server import Message
 from bodymovement import BodyMovement
 from turretmovement import TurretMovement
 import logging
-from states import DummyState, GoToGoalState
+from states import (DummyState, GoToGoalState, CollectHealthState, CollectAmmoState)
 
 AVAILABLE_TURRET_STATES = [
     DummyState,
 ]
 AVAILABLE_BODY_STATES = [
     DummyState,
-    GoToGoalState
+    GoToGoalState,
+    CollectAmmoState,
+    CollectHealthState,
 ]
 
 
