@@ -3,7 +3,12 @@ import struct
 import json
 import socket
 import logging
-from message import Message
+
+
+class Message:
+    def __init__(self, message_type, payload) -> None:
+        self.type = message_type
+        self.payload = payload
 
 
 class ObjectUpdate:

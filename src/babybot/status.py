@@ -1,5 +1,4 @@
-from message import Message
-from server import ServerMessageTypes, ObjectUpdate
+from server import ServerMessageTypes, ObjectUpdate, Message
 from enemy import Enemy
 from collectable import COLLECTABLE_TYPES, Collectable
 import logging
