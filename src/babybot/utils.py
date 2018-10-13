@@ -14,9 +14,10 @@ def heading_from_to(p1: Vector, p2: Vector) -> float:
     x2 = p2[0]
     y2 = p2[1]
 
-    angle = atan2(y2-y1, x2-x1) * (180/pi)
+    angle = math.atan2(y2-y1, x2-x1) * (180/math.pi)
     angle = (angle - 360) % 360
     return abs(angle)
+
 
 def should_turn_left(current_heading: float, goal_heading: float) -> bool:
     """
@@ -28,3 +29,30 @@ def should_turn_left(current_heading: float, goal_heading: float) -> bool:
         return diff > 180
     else:
         return diff >= -180
+
+
+def closest_point(current_point, points) -> Vector:
+    """
+    Returns the point from a list of points which is closest to the given
+    point.
+    """
+    closest = None
+    distance_to_closest = math.inf
+
+    for other_point in points:
+        distance = calculate_distance(current_point, other_point)
+        if (distance < distance_to_closest):
+            closest = other_point
+            distance_to_closest = distance
+
+    return closest
+
+
+def calculate_distance(point1, point2) -> float:
+    """
+    Returns the distances between two points as a float
+    """
+    x = point2[0] - point1[0]
+    y = point2[1] - point1[1]
+
+    return (math.sqrt(x*x + y*y))
