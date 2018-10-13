@@ -11,7 +11,7 @@ def heading_from_to(p1: Vector, p2: Vector) -> float:
     pass
 
 
-def should_turn_left(current_heading: float, goal_heading) -> bool:
+def should_turn_left(current_heading: float, goal_heading: float) -> bool:
     """
     Returns true if the tank should turn left to aim at the goal
     heading.
