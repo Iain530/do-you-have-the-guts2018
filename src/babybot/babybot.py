@@ -47,19 +47,3 @@ while True:
     movement.movebackward()
     # attacking.aim_left()
     print(message)
-
-    # if i == 5:
-    #     if random.randint(0, 10) > 5:
-    #         logging.info("Firing")
-    #         GameServer.sendMessage(ServerMessageTypes.FIRE)
-    # elif i == 10:
-    #     logging.info("Turning randomly")
-    #     GameServer.sendMessage(ServerMessageTypes.TURNTOHEADING, {
-    #                            'Amount': random.randint(0, 359)})
-    # elif i == 15:
-    #     logging.info("Moving randomly")
-    #     GameServer.sendMessage(ServerMessageTypes.MOVEFORWARDDISTANCE, {
-    #                            'Amount': random.randint(0, 10)})
-    # i = i + 1
-    # if i > 20:
-    #     i = 0

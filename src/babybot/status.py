@@ -1,7 +1,7 @@
 from message import Message
 from server import ServerMessageTypes, ObjectUpdate
 from enemy import Enemy
-from collectable import COLLECTABLE_TYPES
+from collectable import COLLECTABLE_TYPES, Collectable
 import logging
 
 
@@ -71,6 +71,16 @@ class Status:
             self.other_tanks[id].update(payload)
 
     def update_collectable(self, payload: ObjectUpdate) -> None:
+        pass
+
+    def find_nearest_ammo(self) -> Collectable:
+        pass
+
+    def find_nearest_health(self) -> Collectable:
+        pass
+
+    def find_nearest_enemy(self) -> Enemy:
+        """ Find the nearest enemy tank """
         pass
 
     def __str__(self):
