@@ -3,9 +3,15 @@ from server import Message
 from bodymovement import BodyMovement
 from turretmovement import TurretMovement
 import logging
+from states import DummyState, GoToGoalState
 
-AVAILABLE_TURRET_STATES = []
-AVAILABLE_BODY_STATES = []
+AVAILABLE_TURRET_STATES = [
+    DummyState,
+]
+AVAILABLE_BODY_STATES = [
+    DummyState,
+    GoToGoalState
+]
 
 
 class StateMachine:
