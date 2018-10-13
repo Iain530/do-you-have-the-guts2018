@@ -21,7 +21,7 @@ class Enemy:
     def update(self, payload: ObjectUpdate) -> None:
         if payload.id == self.id:
             self.last_seen = time()
-            self.position = self.position[-4:] + [(payload.x), (payload.y)]
+            self.position = self.position[-4:] + [(payload.x, payload.y)]
             self.heading = payload.heading
             self.turret_heading = payload.turret_heading
             self.health = payload.health

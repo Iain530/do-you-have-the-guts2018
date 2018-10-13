@@ -85,10 +85,15 @@ class Status:
         pass
 
     def find_nearest_ammo(self) -> Collectable:
-        pass
+        recently_seen = self.recently_seen_collectables(3, typ='AmmoPickup')
+        if len(recently_seen) == 0:
+            return None
+        positions = list(map(lambda t: t.position, recently_seen))
+        i = positions.index(closest_point(self.position, positions))
+        return recently_seen[i]
 
     def find_nearest_health(self) -> Collectable:
-        recently_seen = self.recently_seen_collectables(3)
+        recently_seen = self.recently_seen_collectables(3, typ='HealthPickup')
         if len(recently_seen) == 0:
             return None
         positions = list(map(lambda t: t.position, recently_seen))
@@ -112,11 +117,10 @@ class Status:
                 recently_seen.append(enemy)
         return recently_seen
 
-    def recently_seen_collectables(self, seconds, type) -> List[Collectable]:
-        current_time = time()
+    def recently_seen_collectables(self, seconds, typ) -> List[Collectable]:
         recently_seen = []
         for collectable_id, collectable in self.collectables.items():
-            if collectable.time_since_last() < seconds:
+            if collectable.time_since_last() < seconds and collectable.type == typ:
                 recently_seen.append(collectable)
         return recently_seen
 
