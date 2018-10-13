@@ -14,12 +14,12 @@ class ScanState(State):
     def perform(self):
         if not self.scanning:
             self.start_time = time()
+            self.last_scan_time = time()
         self.turret_controls.aim_left()  # consider distance to walls?
         print(self.start_time, self.scanning)
 
     def calculate_priority(self, is_current_state: bool) -> float:
         if self.scanning and (time() - self.start_time) > SCAN_TIME:
             self.scanning = False
-            self.last_scan_time = time()
         time_since_last = time() - self.last_scan_time
-        return 1 if time_since_last > 10 else 0 # Priority if it's been more than 10s since last scan
+        return 1 if time_since_last > 15 else 0.1 # Priority if it's been more than 10s since last scan

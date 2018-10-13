@@ -13,16 +13,10 @@ class Collectable:
         self.last_seen = time()
         self.position = (payload.x, payload.y)
 
-    def lastseentime(self):
-        # if self.type == "AmmoPickup":
-        #     print("Ammo. Time seen: " + self.last_seen)
-        # elif self.type == "HealthPickup":
-        #     print ("Health. Time seen: " + self.last_seen)
-        # elif self.type == "Snitch":
-        #     print("Snitch. Time seen : " + self.last_seen)
+    def update(self, payload: ObjectUpdate) -> None:
+        self.last_seen = time()
+        self.position = (payload.x, payload.y)
 
+    def time_since_last(self):
         timesincelastseen = time() - self.last_seen
         return timesincelastseen
-
-
-

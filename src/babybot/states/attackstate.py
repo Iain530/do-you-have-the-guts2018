@@ -11,12 +11,16 @@ class AttackState(State):
         enemy = self.target if self.target else self.status.find_nearest_enemy()
         position = self.status.position
 
-        next_heading = heading_from_to(position, enemy.position)
+        next_heading = heading_from_to(position, enemy.current_pos())
         self.turret_controls.aim_at_heading(next_heading)
 
         heading = self.status.heading
-        if within_degrees(2, heading, next_heading):
+        if within_degrees(5, heading, next_heading):
             self.turret_controls.fire()
 
     def calculate_priority(self, is_current_state: bool) -> float:
-        return 0.5 # Default as only 2 attacking priorities
+        enemy = self.status.find_nearest_enemy()
+        if enemy:
+            self.target = enemy
+            return 0.5 # Default as only 2 attacking priorities
+        return 0
