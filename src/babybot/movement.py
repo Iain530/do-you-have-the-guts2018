@@ -10,17 +10,17 @@ class Movement:
         self.turning = False
         self.status = status
 
-    def turn(self):
+    def turndistance(self, amount):
         self.GameServer.sendMessage(ServerMessageTypes.TURNTOHEADING, {
-            'Amount': random.randint(0, 359)}) # random turning
+            'Amount': amount})
 
-    def moveforwarddistance(self):
+    def moveforwarddistance(self, amount):
         self.GameServer.sendMessage(ServerMessageTypes.MOVEFORWARDDISTANCE, {
-            'Amount': random.randint(0,10)}) # random moving forward
+            'Amount': amount})
 
-    def movebackwarddistance(self):
+    def movebackwarddistance(self, amount):
         self.GameServer.sendMessage(ServerMessageTypes.MOVEBACKWARDDISTANCE, {
-            'Amount': random.randint(0,10)}) # random moving backward
+            'Amount': amount})
 
     def moveforwardtoggle(self):
         self.GameServer.sendMessage(ServerMessageTypes.TOGGLEFORWARD)
