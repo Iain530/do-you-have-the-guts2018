@@ -17,14 +17,14 @@ class StateMachine:
         self.GameServer = GameServer
         self.turret_controls = TurretMovement(GameServer=GameServer, status=self.status)
         self.body_controls = BodyMovement(GameServer=GameServer, status=self.status)
-        self.turret_states = map(
+        self.turret_states = list(map(
             lambda State: State(self.turret_controls, self.body_controls, self.status),
             AVAILABLE_TURRET_STATES
-        )
-        self.body_states = map(
+        ))
+        self.body_states = list(map(
             lambda State: State(self.turret_controls, self.body_controls, self.status),
             AVAILABLE_BODY_STATES
-        )
+        ))
         # self.current_turrent_state_i = 0
         # self.current_turrent_state = self.turret_states[0]
         self.current_body_state_i = 0
