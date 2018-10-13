@@ -3,7 +3,7 @@ from server import Message
 from bodymovement import BodyMovement
 from turretmovement import TurretMovement
 import logging
-from states import (DummyState, GoToGoalState, CollectHealthState, CollectAmmoState,
+from states import (RoamingState, GoToGoalState, CollectHealthState, CollectAmmoState,
                     ScanState, AttackState)
 
 AVAILABLE_TURRET_STATES = [
@@ -11,9 +11,10 @@ AVAILABLE_TURRET_STATES = [
     AttackState,
 ]
 AVAILABLE_BODY_STATES = [
-    GoToGoalState,
-    CollectAmmoState,
     CollectHealthState,
+    CollectAmmoState,
+    RoamingState,
+    GoToGoalState,
 ]
 
 
@@ -51,12 +52,13 @@ class StateMachine:
                 is_current_state=(i == self.current_turret_state_i)
             ) for i in range(len(self.turret_states))
         ]
+        logging.info(f"Body: {body_priorities}\nTurret: {turret_priorities}")
         self.current_body_state_i = body_priorities.index(max(body_priorities))
         self.current_turret_state_i = turret_priorities.index(max(turret_priorities))
         self.current_body_state = self.body_states[self.current_body_state_i]
         self.current_turret_state = self.turret_states[self.current_turret_state_i]
 
     def perform_current_state(self) -> None:
-        logging.debug(f"Performing states: {self.current_body_state} {self.current_turret_state}")
+        logging.info(f"Performing states: {self.current_body_state} {self.current_turret_state}")
         self.current_body_state.perform()
         self.current_turret_state.perform()

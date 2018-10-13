@@ -9,6 +9,7 @@ from utils import closest_point
 class Status:
     def __init__(self, name: str) -> None:
         self.name = name
+        self.id = None
         self.position = (0, 0)
         self.heading = 0
         self.turret_heading = 0
@@ -39,6 +40,9 @@ class Status:
             self.reached_goal()
         elif message.type == ServerMessageTypes.SNITCHAPPEARED:
             self.snitch_spawned()
+        elif message.type == ServerMessageTypes.SNITCHPICKUP:
+            if message.payload['Id'] == self.id:
+                self.points += 10
         elif message.type == ServerMessageTypes.DESTROYED:
             self.respawn()
 
@@ -63,6 +67,7 @@ class Status:
         Update status based on an ObjectUpdate for our own tank
         """
         self.position = (payload.x, payload.y)
+        self.id = payload.id
         self.heading = payload.heading
         self.turret_heading = payload.turret_heading
         self.health = payload.health
@@ -79,13 +84,9 @@ class Status:
             self.collectables[payload.id] = Collectable(payload)
         else:
             self.collectables[payload.id].update(payload)
-        self.remove_old_collectables()
-
-    def remove_old_collectables(self):
-        pass
 
     def find_nearest_ammo(self) -> Collectable:
-        recently_seen = self.recently_seen_collectables(15, typ='AmmoPickup')
+        recently_seen = self.recently_seen_collectables(5, typ='AmmoPickup')
         if len(recently_seen) == 0:
             return None
         positions = list(map(lambda t: t.position, recently_seen))
@@ -93,7 +94,7 @@ class Status:
         return recently_seen[i]
 
     def find_nearest_health(self) -> Collectable:
-        recently_seen = self.recently_seen_collectables(15, typ='HealthPickup')
+        recently_seen = self.recently_seen_collectables(5, typ='HealthPickup')
         if len(recently_seen) == 0:
             return None
         positions = list(map(lambda t: t.position, recently_seen))
@@ -102,11 +103,20 @@ class Status:
 
     def find_nearest_enemy(self) -> Enemy:
         """ Find the nearest enemy tank """
-        recently_seen = self.recently_seen_tanks(1.5)
+        recently_seen = self.recently_seen_tanks(1)
         if len(recently_seen) == 0:
             return None
         positions = list(map(lambda t: t.current_pos(), recently_seen))
         i = positions.index(closest_point(self.position, positions))
+        return recently_seen[i]
+
+    def find_lowest_enemy(self) -> Enemy:
+        """ Find the nearest enemy tank """
+        recently_seen = self.recently_seen_tanks(5)
+        if len(recently_seen) == 0:
+            return None
+        healths = list(map(lambda t: t.health, recently_seen))
+        i = healths.index(min(healths))
         return recently_seen[i]
 
     def recently_seen_tanks(self, seconds) -> List[Enemy]:

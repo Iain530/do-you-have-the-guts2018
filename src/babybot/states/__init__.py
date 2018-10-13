@@ -5,3 +5,4 @@ from .collecthealthstate import CollectHealthState
 from .collectammostate import CollectAmmoState
 from .scanstate import ScanState
 from .attackstate import AttackState
+from .roamingstate import RoamingState
