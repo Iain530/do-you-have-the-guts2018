@@ -20,10 +20,12 @@ class BodyMovement:
 
         # turn to heading
         self.turntoheading(heading)
+        print("next: ", heading)
+        print("current: ", self.status.heading)
 
         # move forwards to coords
         if (current_coords != target):
-            self.moveforwarddistance(1)
+            self.moveforwarddistance(5)
 
     def turntoheading(self, heading):
         self.GameServer.sendMessage(ServerMessageTypes.TURNTOHEADING, {
