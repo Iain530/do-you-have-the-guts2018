@@ -14,15 +14,10 @@ class BodyMovement:
 
     def movetopoint(self, target: Vector):
         current_coords = self.status.position
-
         # get heading to turn to
         heading = heading_from_to(current_coords, target)
-
         # turn to heading
         self.turntoheading(heading)
-        print("next: ", heading)
-        print("current: ", self.status.heading)
-
         # move forwards to coords
         if (current_coords != target):
             self.moveforwarddistance(5)

@@ -1,7 +1,6 @@
 from server import ServerMessageTypes, ObjectUpdate, Message
 from enemy import Enemy
 from collectable import COLLECTABLE_TYPES, Collectable
-import logging
 
 
 class Status:
@@ -39,7 +38,6 @@ class Status:
             self.snitch_spawned()
         elif message.type == ServerMessageTypes.DESTROYED:
             self.respawn()
-        logging.info(self)
 
     def kill(self) -> None:
         """ Killed an enemy """
@@ -84,7 +82,11 @@ class Status:
 
     def find_nearest_enemy(self) -> Enemy:
         """ Find the nearest enemy tank """
-        pass
+        best = None
+        current_time = time()
+        for enemy in self.other_tanks.items():
+            if current_time - enemy.last_seen < 1:
+                pass
 
     def __str__(self):
         return (f"<{self.name}> Position: {self.position} Heading: {self.heading} "
