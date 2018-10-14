@@ -33,7 +33,6 @@ class Status:
                     self.update_enemy(payload)
             elif payload.type in COLLECTABLE_TYPES:
                 self.update_collectable(payload)
-            # TODO: snitch update ?
         elif message.type == ServerMessageTypes.KILL:
             self.kill()
         elif message.type == ServerMessageTypes.ENTEREDGOAL:
@@ -128,6 +127,15 @@ class Status:
         healths = list(map(lambda t: t.health, recently_seen))
         i = healths.index(min(healths))
         return recently_seen[i]
+
+    def find_snitch(self) -> Collectable:
+        """ Find the snitch """
+        if not self.snitch_available:
+            return None
+        recently_seen = self.recently_seen_collectables(5, typ='Snitch')
+        if len(recently_seen) == 0:
+            return None
+        return recently_seen[0]
 
     def recently_seen_tanks(self, seconds) -> List[Enemy]:
         current_time = time()

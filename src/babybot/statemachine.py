@@ -4,7 +4,7 @@ from bodymovement import BodyMovement
 from turretmovement import TurretMovement
 import logging
 from states import (RoamingState, GoToGoalState, CollectHealthState, CollectAmmoState,
-                    ScanState, AttackState, RunAwayState)
+                    ScanState, AttackState, RunAwayState, SnitchState)
 
 AVAILABLE_TURRET_STATES = [
     ScanState,
@@ -16,6 +16,7 @@ AVAILABLE_BODY_STATES = [
     RoamingState,
     GoToGoalState,
     RunAwayState,
+    SnitchState
 ]
 
 
