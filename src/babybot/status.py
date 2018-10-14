@@ -131,6 +131,7 @@ class Status:
         for tank in recently_seen:
             if tank.id == self.snitch_carrier_id:
                 return tank
+        return None
 
     def find_nearest_enemy(self) -> Enemy:
         """ Find the nearest enemy tank """
