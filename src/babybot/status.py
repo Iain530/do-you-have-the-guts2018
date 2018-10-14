@@ -20,7 +20,7 @@ class Status:
         self.other_tanks = dict()
         self.collectables = dict()
         self.snitch_available = False
-        self.snitch_carrier = None
+        self.snitch_carrier_id = None
 
     def update(self, message: Message) -> None:
         """ Process an incoming server message """
@@ -33,6 +33,8 @@ class Status:
                     self.update_enemy(payload)
             elif payload.type in COLLECTABLE_TYPES:
                 self.update_collectable(payload)
+                if payload.type == 'Snitch':
+                    self.snitch_carrier_id = None
         elif message.type == ServerMessageTypes.KILL:
             self.kill()
         elif message.type == ServerMessageTypes.ENTEREDGOAL:
@@ -42,6 +44,9 @@ class Status:
         elif message.type == ServerMessageTypes.SNITCHPICKUP:
             if message.payload['Id'] == self.id:
                 self.points += 20
+                self.snitch_carrier_id = None
+            else:
+                self.snitch_carrier_id = message.payload['Id']
         elif message.type == ServerMessageTypes.DESTROYED:
             self.respawn()
 
@@ -106,13 +111,26 @@ class Status:
             hp_score = enemy.health * 0.1
             return dist_score * hp_score
 
+        snitch_carrier = self.find_snitch_carrier()
+        if snitch_carrier:
+            return snitch_carrier
+
         lowest = self.find_lowest_enemy()
         nearest = self.find_nearest_enemy()
+
         if not lowest:
             return nearest
         elif not nearest:
             return lowest
         return lowest if score(lowest) < score(nearest) else nearest
+
+    def find_snitch_carrier(self) -> Enemy:
+        if self.snitch_carrier_id is None:
+            return None
+        recently_seen = self.recently_seen_tanks(2)
+        for tank in recently_seen:
+            if tank.id == self.snitch_carrier_id:
+                return tank
 
     def find_nearest_enemy(self) -> Enemy:
         """ Find the nearest enemy tank """
