@@ -1,6 +1,7 @@
 from server import ServerMessageTypes
 from utils import heading_from_to
 from typing import Tuple
+import logging
 
 Vector = Tuple[float, float]
 
@@ -19,7 +20,7 @@ class BodyMovement:
         # turn to heading
         self.turntoheading(heading)
         # move forwards to coords
-        print(f"moving toward {target}")
+        logging.info(f"moving toward {target}")
         if (current_coords != target):
             self.moveforwarddistance(5)
 

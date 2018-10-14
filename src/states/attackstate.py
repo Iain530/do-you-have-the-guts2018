@@ -12,7 +12,6 @@ class AttackState(State):
         position = self.status.position
 
         next_heading = heading_from_to(position, enemy.current_pos())
-        print(enemy.current_pos())
         # self.turret_controls.aim_left()
         self.turret_controls.aim_at_heading(next_heading)
 

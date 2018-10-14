@@ -177,10 +177,6 @@ i = 0
 while True:
     message = GameServer.readMessage()
 
-    print(message.type, message.payload)
-
-    status.update(message)
-
     if i == 5:
         if random.randint(0, 10) > 5:
             logging.info("Firing")
