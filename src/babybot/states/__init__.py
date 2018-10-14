@@ -6,3 +6,4 @@ from .collectammostate import CollectAmmoState
 from .scanstate import ScanState
 from .attackstate import AttackState
 from .roamingstate import RoamingState
+from .runawaystate import RunAwayState
