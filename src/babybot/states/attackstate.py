@@ -16,10 +16,10 @@ class AttackState(State):
         # self.turret_controls.aim_left()
         self.turret_controls.aim_at_heading(next_heading)
 
-        heading = self.status.heading
+        heading = self.status.turret_heading
 
         distance = calculate_distance(position, enemy.current_pos())
-        angle_allowed = (105 - distance) / 5 + 20
+        angle_allowed = (105 - distance) / 5
 
         if within_degrees(angle_allowed, heading, next_heading):
             self.turret_controls.fire()
