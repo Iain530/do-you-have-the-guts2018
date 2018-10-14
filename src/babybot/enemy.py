@@ -38,7 +38,7 @@ class Enemy:
         Returns true if the enemy tank is aiming at the given position
         """
         heading_to_player = heading_from_to(self.current_pos(), position)
-        return within_degrees(5, self.turret_heading, heading_to_player)
+        return within_degrees(10, self.turret_heading, heading_to_player)
 
     def has_vision_of(self, position: Vector) -> bool:
         """
