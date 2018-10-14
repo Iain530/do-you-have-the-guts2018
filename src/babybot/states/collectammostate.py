@@ -14,6 +14,6 @@ class CollectAmmoState(State):
 
     def calculate_priority(self, is_current_state: bool) -> None:
         self.closest_ammo = self.status.find_nearest_ammo()
-        if self.status.ammo == 10:
+        if self.status.ammo == 10 or self.closest_ammo is None:
             return 0.01
         return (0.5 - (self.status.ammo * 0.05)) + (1 * 0.125)

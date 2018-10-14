@@ -8,7 +8,7 @@ class AttackState(State):
         self.target = None
 
     def perform(self):
-        enemy = self.target if self.target else self.status.find_lowest_enemy()
+        enemy = self.target if self.target else self.status.find_best_enemy_target()
         position = self.status.position
 
         next_heading = heading_from_to(position, enemy.current_pos())
@@ -25,7 +25,7 @@ class AttackState(State):
             self.turret_controls.fire()
 
     def calculate_priority(self, is_current_state: bool) -> float:
-        enemy = self.status.find_lowest_enemy()
+        enemy = self.status.find_best_enemy_target()
         if enemy is not None and self.status.ammo > 0:
             self.target = enemy
             return 0.5  # Default as only 2 attacking priorities

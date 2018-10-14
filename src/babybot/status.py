@@ -109,6 +109,10 @@ class Status:
 
         lowest = self.find_lowest_enemy()
         nearest = self.find_nearest_enemy()
+        if not lowest:
+            return nearest
+        elif not nearest:
+            return lowest
         return lowest if score(lowest) < score(nearest) else nearest
 
     def find_nearest_enemy(self) -> Enemy:
