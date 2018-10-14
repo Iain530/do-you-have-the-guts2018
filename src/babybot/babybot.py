@@ -1,8 +1,10 @@
 #!/usr/bin/python
 import logging
 import argparse
+import threading
 from server import ServerMessageTypes, ServerComms
 from statemachine import StateMachine
+import time
 
 # Parse command line args
 parser = argparse.ArgumentParser()
@@ -32,10 +34,29 @@ GameServer.sendMessage(ServerMessageTypes.CREATETANK, {'Name': args.name})
 
 state_machine = StateMachine(GameServer=GameServer, name=args.name)
 
-# Main loop - read game messages, ignore them and randomly perform actions
-i = 0
-while True:
-    message = GameServer.readMessage()
-    state_machine.update(message)
-    state_machine.choose_state()
-    state_machine.perform_current_state()
+
+lock = threading.Lock()
+
+
+def recieve_messages():
+    while True:
+        message = GameServer.readMessage()
+        lock.acquire()
+        state_machine.update(message)
+        lock.release()
+
+
+def run_state_machine():
+    while True:
+        lock.acquire()
+        state_machine.choose_state()
+        state_machine.perform_current_state()
+        lock.release()
+        time.sleep(0.2)
+
+
+message_thread = threading.Thread(target=recieve_messages)
+message_thread.start()
+
+state_machine_thread = threading.Thread(target=run_state_machine)
+state_machine_thread.start()

@@ -1,5 +1,5 @@
 from .state import State
-from utils import heading_from_to, within_degrees
+from utils import heading_from_to, within_degrees, calculate_distance
 
 
 class AttackState(State):
@@ -8,19 +8,25 @@ class AttackState(State):
         self.target = None
 
     def perform(self):
-        enemy = self.target if self.target else self.status.find_nearest_enemy()
+        enemy = self.target if self.target else self.status.find_lowest_enemy()
         position = self.status.position
 
         next_heading = heading_from_to(position, enemy.current_pos())
+        print(enemy.current_pos())
+        # self.turret_controls.aim_left()
         self.turret_controls.aim_at_heading(next_heading)
 
-        heading = self.status.heading
-        if within_degrees(10, heading, next_heading):
+        heading = self.status.turret_heading
+
+        distance = calculate_distance(position, enemy.current_pos())
+        angle_allowed = (105 - distance) / 5
+
+        if within_degrees(angle_allowed, heading, next_heading):
             self.turret_controls.fire()
 
     def calculate_priority(self, is_current_state: bool) -> float:
-        enemy = self.status.find_nearest_enemy()
-        if enemy:
+        enemy = self.status.find_lowest_enemy()
+        if enemy is not None and self.status.ammo > 0:
             self.target = enemy
             return 0.5  # Default as only 2 attacking priorities
         self.target = None

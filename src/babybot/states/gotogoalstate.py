@@ -12,5 +12,6 @@ class GoToGoalState(State):
 
     def calculate_priority(self, is_current_state: bool):
         if self.status.points == 0:
+            print(self.status.points)
             return 0  # Even though highest priority, if no points, no action
         return (self.status.points * 0.2) + (4 * 0.125)

@@ -19,6 +19,7 @@ class BodyMovement:
         # turn to heading
         self.turntoheading(heading)
         # move forwards to coords
+        print(f"moving toward {target}")
         if (current_coords != target):
             self.moveforwarddistance(5)
 
@@ -47,13 +48,7 @@ class BodyMovement:
         self.GameServer.sendMessage(ServerMessageTypes.TOGGLERIGHT)
 
     def stopmoving(self):
-        if self.moving:
-            self.GameServer.sendMessage(ServerMessageTypes.STOPMOVE)
-        else:
-            print("No move to stop.")
+        self.GameServer.sendMessage(ServerMessageTypes.STOPMOVE)
 
     def stopturning(self):
-        if self.turning:
-            self.GameServer.sendMessage(ServerMessageTypes.STOPTURN)
-        else:
-            print("No turn to stop.")
+        self.GameServer.sendMessage(ServerMessageTypes.STOPTURN)
