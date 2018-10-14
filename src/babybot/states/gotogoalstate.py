@@ -1,14 +1,17 @@
-from status import Status
 from .state import State
+from utils import closest_point
 
 
 class GoToGoalState(State):
     def perform(self):
         goals = [(0, 100), (0, -100)]
 
-        closestGoal = closest(self.status.position, goals)
+        closestGoal = closest_point(self.status.position, goals)
 
         self.body_controls.movetopoint(closestGoal)
 
-    def calculate_priority(self, status: Status, is_current_state: bool):
-        return 0
+    def calculate_priority(self, is_current_state: bool):
+        if self.status.points == 0:
+            print(self.status.points)
+            return 0  # Even though highest priority, if no points, no action
+        return (self.status.points * 0.2) + (4 * 0.125)

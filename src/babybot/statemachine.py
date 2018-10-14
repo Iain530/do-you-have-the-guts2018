@@ -3,16 +3,18 @@ from server import Message
 from bodymovement import BodyMovement
 from turretmovement import TurretMovement
 import logging
-from states import (DummyState, GoToGoalState, CollectHealthState, CollectAmmoState)
+from states import (RoamingState, GoToGoalState, CollectHealthState, CollectAmmoState,
+                    ScanState, AttackState)
 
 AVAILABLE_TURRET_STATES = [
-    DummyState,
+    ScanState,
+    AttackState,
 ]
 AVAILABLE_BODY_STATES = [
-    DummyState,
-    GoToGoalState,
-    CollectAmmoState,
     CollectHealthState,
+    CollectAmmoState,
+    RoamingState,
+    GoToGoalState,
 ]
 
 
@@ -37,18 +39,20 @@ class StateMachine:
 
     def update(self, message: Message) -> None:
         self.status.update(message=message)
+        logging.info(f"Recieved message {message.type}: {message.payload}")
 
     def choose_state(self) -> None:
         body_priorities = [
             self.body_states[i].calculate_priority(
-                self.status, i == self.current_body_state_i
+                is_current_state=(i == self.current_body_state_i)
             ) for i in range(len(self.body_states))
         ]
         turret_priorities = [
             self.turret_states[i].calculate_priority(
-                self.status, i == self.current_turret_state_i
+                is_current_state=(i == self.current_turret_state_i)
             ) for i in range(len(self.turret_states))
         ]
+        logging.info(f"Body: {body_priorities}\nTurret: {turret_priorities}")
         self.current_body_state_i = body_priorities.index(max(body_priorities))
         self.current_turret_state_i = turret_priorities.index(max(turret_priorities))
         self.current_body_state = self.body_states[self.current_body_state_i]

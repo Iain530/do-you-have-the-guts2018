@@ -1,12 +1,15 @@
 from server import ServerMessageTypes, ObjectUpdate, Message
 from enemy import Enemy
+from typing import List
 from collectable import COLLECTABLE_TYPES, Collectable
-import logging
+from time import time
+from utils import closest_point
 
 
 class Status:
     def __init__(self, name: str) -> None:
         self.name = name
+        self.id = None
         self.position = (0, 0)
         self.heading = 0
         self.turret_heading = 0
@@ -37,9 +40,11 @@ class Status:
             self.reached_goal()
         elif message.type == ServerMessageTypes.SNITCHAPPEARED:
             self.snitch_spawned()
+        elif message.type == ServerMessageTypes.SNITCHPICKUP:
+            if message.payload['Id'] == self.id:
+                self.points += 10
         elif message.type == ServerMessageTypes.DESTROYED:
             self.respawn()
-        logging.info(self)
 
     def kill(self) -> None:
         """ Killed an enemy """
@@ -62,6 +67,7 @@ class Status:
         Update status based on an ObjectUpdate for our own tank
         """
         self.position = (payload.x, payload.y)
+        self.id = payload.id
         self.heading = payload.heading
         self.turret_heading = payload.turret_heading
         self.health = payload.health
@@ -69,22 +75,64 @@ class Status:
 
     def update_enemy(self, payload: ObjectUpdate) -> None:
         if payload.id not in self.other_tanks:
-            self.other_tanks[id] = Enemy(payload)
+            self.other_tanks[payload.id] = Enemy(payload)
         else:
-            self.other_tanks[id].update(payload)
+            self.other_tanks[payload.id].update(payload)
 
     def update_collectable(self, payload: ObjectUpdate) -> None:
-        pass
+        if payload.id not in self.collectables:
+            self.collectables[payload.id] = Collectable(payload)
+        else:
+            self.collectables[payload.id].update(payload)
 
     def find_nearest_ammo(self) -> Collectable:
-        pass
+        recently_seen = self.recently_seen_collectables(5, typ='AmmoPickup')
+        if len(recently_seen) == 0:
+            return None
+        positions = list(map(lambda t: t.position, recently_seen))
+        i = positions.index(closest_point(self.position, positions))
+        return recently_seen[i]
 
     def find_nearest_health(self) -> Collectable:
-        pass
+        recently_seen = self.recently_seen_collectables(5, typ='HealthPickup')
+        if len(recently_seen) == 0:
+            return None
+        positions = list(map(lambda t: t.position, recently_seen))
+        i = positions.index(closest_point(self.position, positions))
+        return recently_seen[i]
 
     def find_nearest_enemy(self) -> Enemy:
         """ Find the nearest enemy tank """
-        pass
+        recently_seen = self.recently_seen_tanks(1)
+        if len(recently_seen) == 0:
+            return None
+        positions = list(map(lambda t: t.current_pos(), recently_seen))
+        i = positions.index(closest_point(self.position, positions))
+        return recently_seen[i]
+
+    def find_lowest_enemy(self) -> Enemy:
+        """ Find the nearest enemy tank """
+        recently_seen = self.recently_seen_tanks(5)
+        if len(recently_seen) == 0:
+            return None
+        healths = list(map(lambda t: t.health, recently_seen))
+        i = healths.index(min(healths))
+        return recently_seen[i]
+
+    def recently_seen_tanks(self, seconds) -> List[Enemy]:
+        current_time = time()
+        recently_seen = []
+        for tank_id, enemy in self.other_tanks.items():
+            if current_time - enemy.last_seen < seconds:
+                recently_seen.append(enemy)
+        return recently_seen
+
+    def recently_seen_collectables(self, seconds, typ) -> List[Collectable]:
+        recently_seen = []
+        for collectable_id, collectable in self.collectables.items():
+            if collectable.time_since_last() < seconds and collectable.type == typ:
+                recently_seen.append(collectable)
+        return recently_seen
 
     def __str__(self):
         return (f"<{self.name}> Position: {self.position} Heading: {self.heading} "
