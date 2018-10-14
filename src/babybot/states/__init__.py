@@ -7,3 +7,4 @@ from .scanstate import ScanState
 from .attackstate import AttackState
 from .roamingstate import RoamingState
 from .runawaystate import RunAwayState
+from .stitchstate import SnitchState

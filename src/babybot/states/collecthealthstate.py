@@ -16,4 +16,4 @@ class CollectHealthState(State):
         self.closest_health = self.status.find_nearest_health()
         if self.status.health == 5 or self.closest_health is None:
             return 0.02
-        return (0.6 - (self.status.health * 0.1)) + (3 * 0.125)
+        return (0.6 - (self.status.health * 0.1)) + (2 * 0.125)
