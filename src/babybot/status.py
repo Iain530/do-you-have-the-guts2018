@@ -41,7 +41,7 @@ class Status:
             self.snitch_spawned()
         elif message.type == ServerMessageTypes.SNITCHPICKUP:
             if message.payload['Id'] == self.id:
-                self.points += 20 # Could change
+                self.points += 20
         elif message.type == ServerMessageTypes.DESTROYED:
             self.respawn()
 
