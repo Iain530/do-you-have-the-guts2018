@@ -1,6 +1,7 @@
 from .state import State
 from utils import within_degrees
 
+
 class RunAwayState(State):
     def perform(self):
         baby_pos = self.status.position

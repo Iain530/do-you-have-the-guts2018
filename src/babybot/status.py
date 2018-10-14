@@ -3,7 +3,7 @@ from enemy import Enemy
 from typing import List
 from collectable import COLLECTABLE_TYPES, Collectable
 from time import time
-from utils import closest_point
+from utils import closest_point, calculate_distance
 
 
 class Status:
@@ -100,6 +100,16 @@ class Status:
         positions = list(map(lambda t: t.position, recently_seen))
         i = positions.index(closest_point(self.position, positions))
         return recently_seen[i]
+
+    def find_best_enemy_target(self) -> Enemy:
+        def score(enemy):
+            dist_score = calculate_distance(self.position, enemy.current_pos()) / 100
+            hp_score = enemy.health * 0.1
+            return dist_score * hp_score
+
+        lowest = self.find_lowest_enemy()
+        nearest = self.find_nearest_enemy()
+        return lowest if score(lowest) < score(nearest) else nearest
 
     def find_nearest_enemy(self) -> Enemy:
         """ Find the nearest enemy tank """
